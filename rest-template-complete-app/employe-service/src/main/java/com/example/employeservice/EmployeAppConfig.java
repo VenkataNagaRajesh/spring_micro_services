@@ -8,11 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class EmployeAppConfig {
 
-	@Bean
-	public RestTemplate restTemplate()
-	{
-		return new RestTemplate();
-	}
+	
 	@Bean
 	public ModelMapper modelMapper()
 	{

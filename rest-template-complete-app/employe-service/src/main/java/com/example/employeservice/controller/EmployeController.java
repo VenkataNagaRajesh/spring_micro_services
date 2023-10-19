@@ -17,14 +17,12 @@ import lombok.RequiredArgsConstructor;
 public class EmployeController {
 	
 	private final EmployeService empService;
-	private final RestTemplate restTemplate; 
 	
 	
 	@GetMapping("/employees/{id}")
 	public ResponseEntity<EmployeResponse> getEmployeDetails(@PathVariable("id") int id)
 	{
 		
-		String address = restTemplate.getForObject("http://localhost:8085/address/{id}",String.class,id );
 		EmployeResponse employeResponse = empService.getEmployeById(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(employeResponse);

@@ -1,6 +1,9 @@
 package com.example.employeservice.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,12 +15,23 @@ import com.example.employeservice.repository.EmpRepo;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeService {
 
-	private final EmpRepo empRepo;
-	private final ModelMapper modelMapper;
-	private final RestTemplate restTemplate;
+	@Autowired
+	private  EmpRepo empRepo;
+	@Autowired
+	private  ModelMapper modelMapper;
+//	@Autowired
+	private RestTemplate restTemplate;
+	
+	
+	public  EmployeService(@Value("${addressservice.base.url}") String addressService,RestTemplateBuilder builder)
+	
+	{
+		System.err.println(addressService);
+		this.restTemplate = builder.rootUri(addressService).build();
+		System.out.println(restTemplate);
+	}
 	
 	public EmployeResponse getEmployeById(int id)
 	{
@@ -27,8 +41,9 @@ public class EmployeService {
 		
 		EmployeResponse empResponse = 
 		modelMapper.map(employe, EmployeResponse.class);
-		
-		addressResponse  = restTemplate.getForObject("http://localhost:8085/address/{id}", AddressResponse.class,id);
+	System.out.println(empResponse);
+		addressResponse  = restTemplate.getForObject("/address/{id}", AddressResponse.class,id);
+		System.out.println("here"+addressResponse);
 		empResponse.setAddressResponse(addressResponse);
 		return empResponse;
 	}
